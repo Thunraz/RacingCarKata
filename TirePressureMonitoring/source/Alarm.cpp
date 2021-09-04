@@ -9,6 +9,16 @@ Alarm::Alarm(SensorInterface const& sensor)
 {
 }
 
+void Alarm::setLowPressureThreshold(double newThreshold)
+{
+    m_lowPressureThreshold = newThreshold;
+}
+
+void Alarm::setHighPressureThreshold(double newThreshold)
+{
+    m_highPressureThreshold = newThreshold;
+}
+
 void Alarm::check()
 {
     double psiPressureValue = m_sensor.popNextPressurePsiValue();
