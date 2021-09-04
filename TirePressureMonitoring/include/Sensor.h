@@ -1,8 +1,9 @@
 #pragma once
 
-class Sensor
-{
+#include "sensor_interface.hpp"
+
+class Sensor : public SensorInterface {
 public:
     Sensor();
-    double popNextPressurePsiValue() const;    
+    double popNextPressurePsiValue() const override;
 };

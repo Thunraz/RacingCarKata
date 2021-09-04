@@ -2,6 +2,7 @@
 add_library(TirePressureMonitoring
    include/Alarm.h
    include/Sensor.h
+   include/sensor_interface.hpp
    source/Alarm.cpp
    source/Sensor.cpp
 )
