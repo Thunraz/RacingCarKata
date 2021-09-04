@@ -1,17 +1,15 @@
 
 #include "../include/Sensor.h"
 
-#include <cstdlib>
-#include <time.h>
-
-Sensor::Sensor()
+Sensor::Sensor(unsigned const seed)
 {
-    srand((unsigned)time(0));
+    m_random_engine.seed(seed);
 }
 
 double Sensor::popNextPressurePsiValue() const
 {
     // placeholder implementation that simulates a real sensor in a real tire
-    double pressure = 16 + (float)rand()/((float)RAND_MAX/(6));
+    std::uniform_real_distribution<double> distribution {16.0,22.0};
+    double pressure = distribution(m_random_engine);
     return pressure;
 }

@@ -2,6 +2,7 @@
 if (USE_GOOGLE_TEST)
     add_executable(TirePressureMonitoring_Test_Gmock
             Alarm_Test.cpp
+            Sensor_Test.cpp
             )
     set_property(TARGET TirePressureMonitoring_Test_Gmock PROPERTY CXX_STANDARD 14)
     if (NOT USE_APPROVAL_TESTS)
