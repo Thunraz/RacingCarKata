@@ -7,7 +7,7 @@ class Alarm
 public:
     Alarm();
     void check();
-    bool isAlarmOn();
+    bool isAlarmOn() const;
 
 protected:
     Sensor m_sensor;

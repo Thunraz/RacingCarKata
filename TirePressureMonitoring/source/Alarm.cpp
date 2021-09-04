@@ -14,7 +14,7 @@ void Alarm::check()
     }
 }
 
-bool Alarm::isAlarmOn()
+bool Alarm::isAlarmOn() const
 {
     return m_alarmOn;
 }

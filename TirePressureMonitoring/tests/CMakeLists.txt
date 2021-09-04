@@ -25,25 +25,4 @@ if (USE_GOOGLE_TEST)
     gtest_discover_tests(TirePressureMonitoring_Test_Gmock)
 endif ()
 
-if (USE_CATCH2)
-    add_executable(Alarm_catch
-            Alarm_catch.cpp
-            )
-    set_property(TARGET Alarm_catch PROPERTY CXX_STANDARD 14)
-    if (NOT USE_APPROVAL_TESTS)
-        target_link_libraries(Alarm_catch
-                PRIVATE TirePressureMonitoring
-                PRIVATE Catch2::Catch2
-                )
-    else()
-        target_link_libraries(Alarm_catch
-                PRIVATE TirePressureMonitoring
-                PRIVATE Catch2::Catch2
-                ApprovalTests
-                )
-    endif ()
-    include(CTest)
-    include(Catch)
-    catch_discover_tests(Alarm_catch)
-endif ()
 
