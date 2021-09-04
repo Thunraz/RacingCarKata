@@ -4,5 +4,5 @@ class Sensor
 {
 public:
     Sensor();
-    double popNextPressurePsiValue();    
+    double popNextPressurePsiValue() const;    
 };

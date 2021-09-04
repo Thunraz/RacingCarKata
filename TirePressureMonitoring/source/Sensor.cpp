@@ -9,7 +9,7 @@ Sensor::Sensor()
     srand((unsigned)time(0));
 }
 
-double Sensor::popNextPressurePsiValue()
+double Sensor::popNextPressurePsiValue() const
 {
     // placeholder implementation that simulates a real sensor in a real tire
     double pressure = 16 + (float)rand()/((float)RAND_MAX/(6));

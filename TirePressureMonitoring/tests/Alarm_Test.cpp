@@ -3,7 +3,8 @@
 
 namespace {
   TEST(Alarm, InitialAlarmValueIsOff) {
-    Alarm const alarm{};
+    Sensor const pressue_sensor;
+    Alarm const alarm{pressue_sensor};
     ASSERT_EQ(false, alarm.isAlarmOn());
   }
 }

@@ -5,12 +5,12 @@
 class Alarm
 {
 public:
-    Alarm();
+    Alarm(Sensor const& sensor);
     void check();
     bool isAlarmOn() const;
 
 protected:
-    Sensor m_sensor;
+    Sensor const& m_sensor;
     double m_lowPressureThreshold;
     double m_highPressureThreshold;
     bool m_alarmOn;
