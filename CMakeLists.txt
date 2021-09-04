@@ -14,6 +14,8 @@ if (NOT USE_APPROVAL_TESTS)
 endif ()
 include(FetchContent)
 
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+
 if (USE_CATCH2)
     FetchContent_Declare(Catch2
             GIT_REPOSITORY https://github.com/catchorg/Catch2.git
