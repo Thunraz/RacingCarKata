@@ -1,11 +1,17 @@
-#include <gmock/gmock.h>
 #include "HtmlTextConverter.h"
+#include <gmock/gmock.h>
 
 namespace {
-  TEST(Alarm, Foo) {
-        auto converter = new HtmlTextConverter("foo");
-        ASSERT_EQ("fixme", converter->getFilename());
 
-    }
+TEST(HtmlTextConverterTest, ReturnsCorrectFilename) {
+  HtmlTextConverter const converter{"foo"};
+  ASSERT_EQ("foo", converter.getFilename());
 }
 
+TEST(HtmlTextConverterTest, ConvertToHtmlFailsForInvalidFileName) {
+  HtmlTextConverter converter{"?ThisWontWork?"};
+
+  ASSERT_ANY_THROW(converter.convertToHtml());
+}
+
+} // namespace

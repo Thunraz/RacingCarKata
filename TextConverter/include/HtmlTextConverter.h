@@ -1,15 +1,14 @@
 
-#include <string>
 #include <fstream>
+#include <string>
 
-class HtmlTextConverter
-{
-    std::string m_fullFilenameWithPath;
+class HtmlTextConverter {
+  std::string m_fullFilenameWithPath;
 
-public: 
-    HtmlTextConverter(std::string const& fullFilenameWithPath);
+public:
+  HtmlTextConverter(std::string const &fullFilenameWithPath);
 
-    std::string convertToHtml();
+  std::string convertToHtml();
 
-    std::string getFilename();
+  std::string getFilename() const;
 };
