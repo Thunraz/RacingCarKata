@@ -85,4 +85,31 @@ It&quot;s fast &amp; reliable.<br />
     ASSERT_EQ(result, expected);
 }
 
+TEST(FileReaderTest, FileReaderReturnsEmptyStringByDefault)
+{
+    FileReader reader;
+    ASSERT_EQ("", reader.get_last_filename());
+}
+
+TEST(FileReaderTest, FileReaderReturnsLastFilename)
+{
+    FileReader reader;
+    reader.get_content("my_file.txt");
+    ASSERT_EQ("my_file.txt", reader.get_last_filename());
+}
+
+TEST(HtmlTextConverterTest, FileReaderThrowsExceptionForInvalidFilename)
+{
+    auto fn = []() {
+        FileReader reader;
+        try {
+            reader.get_content("?invalid?");
+        } catch (std::invalid_argument& e) {
+            EXPECT_STREQ(e.what(), "Invalid file name");
+            throw;
+        }
+    };
+    ASSERT_THROW(fn(), std::invalid_argument);
+}
+
 } // namespace
