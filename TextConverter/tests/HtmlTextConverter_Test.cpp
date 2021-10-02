@@ -3,33 +3,31 @@
 
 namespace {
 
-TEST(HtmlTextConverterTest, ReturnsCorrectFilename)
-{
-    HtmlTextConverter const converter { "foo" };
-    ASSERT_EQ("foo", converter.getFilename());
-}
-
-TEST(HtmlTextConverterTest, ConvertToHtmlFailsForInvalidFileName)
-{
-
-    auto fn = []() {
-        HtmlTextConverter converter { "?ThisWontWork?" };
-        try {
-            converter.convertToHtml();
-        } catch (std::invalid_argument& e) {
-            EXPECT_STREQ(e.what(), "Invalid file name");
-            throw;
-        }
-    };
-    ASSERT_THROW(fn(), std::invalid_argument);
-}
-
+// TEST(HtmlTextConverterTest, ReturnsCorrectFilename)
+//{
+//     HtmlTextConverter const converter { "foo" };
+//     ASSERT_EQ("foo", converter.getFilename());
+// }
+//
+// TEST(HtmlTextConverterTest, ConvertToHtmlFailsForInvalidFileName)
+//{
+//
+//     auto fn = []() {
+//         HtmlTextConverter converter { "?ThisWontWork?" };
+//         try {
+//             converter.convertToHtml();
+//         } catch (std::invalid_argument& e) {
+//             EXPECT_STREQ(e.what(), "Invalid file name");
+//             throw;
+//         }
+//     };
+//     ASSERT_THROW(fn(), std::invalid_argument);
+// }
 
 TEST(HtmlTextConverterTest, EmptyStringConvertsToEmptyHTML)
 {
-    HtmlTextConverter converter { "" };
 
-    std::string result = converter.convert("");
+    std::string result = convert_text_to_html("");
 
     std::string expected = "";
 
@@ -38,40 +36,34 @@ TEST(HtmlTextConverterTest, EmptyStringConvertsToEmptyHTML)
 
 TEST(HtmlTextConverterTest, SimpleTextConvertsToSameText)
 {
-    HtmlTextConverter converter { "" };
-
-    std::string result = converter.convert("abc123");
+    std::string result = convert_text_to_html("abc123");
 
     std::string expected = "abc123";
 
     ASSERT_EQ(result, expected);
 }
 
-
 class SpecialCharacterTestFixture
-    : public ::testing::TestWithParam<std::pair<std::string, std::string>> {};
+    : public ::testing::TestWithParam<std::pair<std::string, std::string>> {
+};
 
-TEST_P(SpecialCharacterTestFixture,
-       SpecialCharacterIsProperlyConverted) {
-    HtmlTextConverter converter { "" };
-
-    std::string result = converter.convert(GetParam().first);
+TEST_P(SpecialCharacterTestFixture, SpecialCharacterIsProperlyConverted)
+{
+    std::string result = convert_text_to_html(GetParam().first);
 
     std::string expected = GetParam().second;
 
     ASSERT_EQ(result, expected);
 }
 
-INSTANTIATE_TEST_SUITE_P(SpecialCharacterTest,
-                         SpecialCharacterTestFixture,
-                         ::testing::Values(std::make_pair("<", "&lt;")));
-
+INSTANTIATE_TEST_SUITE_P(SpecialCharacterTest, SpecialCharacterTestFixture,
+    ::testing::Values(std::make_pair("<", "&lt;"), std::make_pair(">", "&gt;"),
+        std::make_pair("&", "&amp;"), std::make_pair("\"", "&quot;"),
+        std::make_pair("'", "&quot;")));
 
 TEST(HtmlTextConverterTest, NewlineConvertsToBrTag)
 {
-    HtmlTextConverter converter { "" };
-
-    std::string result = converter.convert("\n");
+    std::string result = convert_text_to_html("\n");
 
     std::string expected = "<br />\n";
 
@@ -80,9 +72,7 @@ TEST(HtmlTextConverterTest, NewlineConvertsToBrTag)
 
 TEST(HtmlTextConverterTest, BossMonsterFinalTest)
 {
-    HtmlTextConverter converter { "" };
-
-    std::string result = converter.convert(R"(
+    std::string result = convert_text_to_html(R"(
 Lorem Ipsum
 This is a <b>cool</b> text about our racing car.
 It's fast & reliable.

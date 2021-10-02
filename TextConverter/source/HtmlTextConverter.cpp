@@ -3,29 +3,7 @@
 #include "../include/HtmlTextConverter.h"
 #include "../include/StringEscapeUtils.h"
 
-HtmlTextConverter::HtmlTextConverter(std::string const& fullFilenameWithPath)
-    : m_fullFilenameWithPath(fullFilenameWithPath)
-{
-}
-
-std::string HtmlTextConverter::convertToHtml()
-{
-    std::ifstream reader(m_fullFilenameWithPath);
-    if (!reader.is_open()) {
-        throw std::invalid_argument { "Invalid file name" };
-    }
-    std::string line;
-    std::string html;
-    while (std::getline(reader, line)) {
-        html += StringEscapeUtils::escapeHtml(line);
-        html += "<br />";
-    }
-    return html;
-}
-
-std::string HtmlTextConverter::getFilename() const { return m_fullFilenameWithPath; }
-
-std::string HtmlTextConverter::convert(std::string const& text_to_convert) const
+std::string convert_text_to_html(std::string const& text_to_convert)
 {
     std::string output = text_to_convert;
     output = StringEscapeUtils::escapeHtml(output);
