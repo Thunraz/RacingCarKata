@@ -9,9 +9,20 @@ TEST(HtmlTextConverterTest, ReturnsCorrectFilename) {
 }
 
 TEST(HtmlTextConverterTest, ConvertToHtmlFailsForInvalidFileName) {
-  HtmlTextConverter converter{"?ThisWontWork?"};
 
-  ASSERT_ANY_THROW(converter.convertToHtml());
+  auto fn = [](){
+    HtmlTextConverter converter{"?ThisWontWork?"};
+    try{
+      converter.convertToHtml();
+    } 
+    catch(std::invalid_argument &e){
+      EXPECT_STREQ(e.what(),"Invalid file name");
+      throw;
+    }
+  };
+  ASSERT_THROW(fn(),std::invalid_argument);
 }
+
+
 
 } // namespace

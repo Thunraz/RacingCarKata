@@ -7,7 +7,9 @@ HtmlTextConverter::HtmlTextConverter(std::string const &fullFilenameWithPath)
 
 std::string HtmlTextConverter::convertToHtml() {
   std::ifstream reader(m_fullFilenameWithPath);
-
+  if(!reader.is_open()){
+      throw std::invalid_argument{"Invalid file name"};
+  }
   std::string line;
   std::string html;
   while (std::getline(reader, line)) {
