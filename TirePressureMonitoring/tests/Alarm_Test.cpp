@@ -19,7 +19,7 @@ protected:
 };
 
 TEST_F(AlarmTest, InitialAlarmValueIsOff) {
-  ASSERT_EQ(false, alarm.isAlarmOn());
+  ASSERT_FALSE(alarm.isAlarmOn());
 }
 
 class AlarmTestDefaultLowThresholdTestFixture
@@ -32,7 +32,7 @@ TEST_P(AlarmTestDefaultLowThresholdTestFixture,
       .WillOnce(Return(GetParam()));
 
   alarm.check();
-  ASSERT_EQ(true, alarm.isAlarmOn());
+  ASSERT_TRUE(alarm.isAlarmOn());
 }
 
 INSTANTIATE_TEST_SUITE_P(AlarmTestLowThresholdTest,
@@ -50,7 +50,7 @@ TEST_P(AlarmTestSetLowThresholdTestFixture,
       .WillOnce(Return(GetParam().second));
 
   alarm.check();
-  ASSERT_EQ(true, alarm.isAlarmOn());
+  ASSERT_TRUE(alarm.isAlarmOn());
 }
 
 INSTANTIATE_TEST_SUITE_P(AlarmTestSetLowThresholdTest,
@@ -69,7 +69,7 @@ TEST_P(AlarmTestDefaultHighThresholdTestFixture,
       .WillOnce(Return(GetParam()));
 
   alarm.check();
-  ASSERT_EQ(true, alarm.isAlarmOn());
+  ASSERT_TRUE(alarm.isAlarmOn());
 }
 
 INSTANTIATE_TEST_SUITE_P(AlarmTestDefaultHighThresholdTest,
@@ -86,7 +86,7 @@ TEST_P(AlarmTestSetHighThresholdTestFixture, AlarmIsOnWhenPressureIsAboveSetHigh
       .WillOnce(Return(GetParam().second));
 
   alarm.check();
-  ASSERT_EQ(true, alarm.isAlarmOn());
+  ASSERT_TRUE(alarm.isAlarmOn());
 }
 
 INSTANTIATE_TEST_SUITE_P(AlarmTestSetHighThresholdTest,
