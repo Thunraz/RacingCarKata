@@ -24,7 +24,61 @@ TEST(HtmlTextConverterTest, ConvertToHtmlFailsForInvalidFileName)
     ASSERT_THROW(fn(), std::invalid_argument);
 }
 
-TEST(HtmlTextConverterTest, Convert)
+
+TEST(HtmlTextConverterTest, EmptyStringConvertsToEmptyHTML)
+{
+    HtmlTextConverter converter { "" };
+
+    std::string result = converter.convert("");
+
+    std::string expected = "";
+
+    ASSERT_EQ(result, expected);
+}
+
+TEST(HtmlTextConverterTest, SimpleTextConvertsToSameText)
+{
+    HtmlTextConverter converter { "" };
+
+    std::string result = converter.convert("abc123");
+
+    std::string expected = "abc123";
+
+    ASSERT_EQ(result, expected);
+}
+
+
+class SpecialCharacterTestFixture
+    : public ::testing::TestWithParam<std::pair<std::string, std::string>> {};
+
+TEST_P(SpecialCharacterTestFixture,
+       SpecialCharacterIsProperlyConverted) {
+    HtmlTextConverter converter { "" };
+
+    std::string result = converter.convert(GetParam().first);
+
+    std::string expected = GetParam().second;
+
+    ASSERT_EQ(result, expected);
+}
+
+INSTANTIATE_TEST_SUITE_P(SpecialCharacterTest,
+                         SpecialCharacterTestFixture,
+                         ::testing::Values(std::make_pair("<", "&lt;")));
+
+
+TEST(HtmlTextConverterTest, NewlineConvertsToBrTag)
+{
+    HtmlTextConverter converter { "" };
+
+    std::string result = converter.convert("\n");
+
+    std::string expected = "<br />\n";
+
+    ASSERT_EQ(result, expected);
+}
+
+TEST(HtmlTextConverterTest, BossMonsterFinalTest)
 {
     HtmlTextConverter converter { "" };
 
