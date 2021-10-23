@@ -1,6 +1,6 @@
+#include "FileReader.hpp"
 #include "FileReaderMock.hpp"
 #include "HtmlTextConverter.h"
-#include "FileReader.hpp"
 #include <gmock/gmock.h>
 #include <memory>
 
@@ -10,19 +10,16 @@ namespace {
 
 TEST(HtmlTextConverterTest, EmptyStringConvertsToEmptyHTML)
 {
-
-    std::string result = convert_text_to_html("");
-
-    std::string expected = "";
+    std::string const result = convert_text_to_html("");
+    std::string const expected = "";
 
     ASSERT_EQ(result, expected);
 }
 
 TEST(HtmlTextConverterTest, SimpleTextConvertsToSameText)
 {
-    std::string result = convert_text_to_html("abc123");
-
-    std::string expected = "abc123";
+    std::string const result = convert_text_to_html("abc123");
+    std::string const expected = "abc123";
 
     ASSERT_EQ(result, expected);
 }
@@ -33,9 +30,8 @@ class SpecialCharacterTestFixture
 
 TEST_P(SpecialCharacterTestFixture, SpecialCharacterIsProperlyConverted)
 {
-    std::string result = convert_text_to_html(GetParam().first);
-
-    std::string expected = GetParam().second;
+    std::string const result = convert_text_to_html(GetParam().first);
+    std::string const expected = GetParam().second;
 
     ASSERT_EQ(result, expected);
 }
@@ -47,50 +43,54 @@ INSTANTIATE_TEST_SUITE_P(SpecialCharacterTest, SpecialCharacterTestFixture,
 
 TEST(HtmlTextConverterTest, NewlineConvertsToBrTag)
 {
-    std::string result = convert_text_to_html("\n");
-
-    std::string expected = "<br />\n";
+    std::string const result = convert_text_to_html("\n");
+    std::string const expected = "<br />\n";
 
     ASSERT_EQ(result, expected);
 }
 
 TEST(HtmlTextConverterTest, BossMonsterFinalTest)
 {
-    std::string result = convert_text_to_html(R"(
+    auto const input_string = R"(
 Lorem Ipsum
 This is a <b>cool</b> text about our racing car.
 It's fast & reliable.
-)");
+)";
 
-    std::string expected = R"(<br />
+    auto const expected_output_stringh = R"(<br />
 Lorem Ipsum<br />
 This is a &lt;b&gt;cool&lt;/b&gt; text about our racing car.<br />
 It&quot;s fast &amp; reliable.<br />
 )";
 
-    ASSERT_EQ(result, expected);
+    std::string result = convert_text_to_html(input_string);
+    ASSERT_EQ(result, expected_output_stringh);
 }
 
 TEST(FileReaderTest, FileReaderReturnsLastFilename)
 {
-    FileReader reader{"my_file.txt"};
+    FileReader const reader { "my_file.txt" };
     ASSERT_EQ("my_file.txt", reader.get_last_filename());
 }
 
 class HtmlTextConverterParametrizedTestFixture
     : public ::testing::TestWithParam<std::pair<std::string, std::string>> {
+protected:
+    FileReaderMock m_file_reader;
+    std::string m_expected_output;
+
+    void SetUp() override
+    {
+        auto const input_string = GetParam().first;
+        m_expected_output = GetParam().second;
+        EXPECT_CALL(m_file_reader, get_content()).WillOnce(Return(input_string));
+    }
 };
 
 TEST_P(HtmlTextConverterParametrizedTestFixture, ConvertFileToHTMLWorksAsExpected)
 {
-    auto const input_string = GetParam().first;
-    auto const expected_output = GetParam().second;
-    FileReaderMock file_reader;
-    EXPECT_CALL(file_reader, get_content()).WillOnce(Return(input_string));
-
-    auto const converted_text = convert_file_to_html(file_reader);
-
-    ASSERT_EQ(expected_output, converted_text);
+    auto const converted_text = convert_file_to_html(m_file_reader);
+    ASSERT_EQ(m_expected_output, converted_text);
 }
 
 INSTANTIATE_TEST_SUITE_P(HtmlTextConverterParametrizedTest,
