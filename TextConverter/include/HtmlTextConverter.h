@@ -3,8 +3,10 @@
 #include <string>
 
 class FileReaderInterface {
+public:
     virtual std::string get_content(std::string const& filename) = 0;
     virtual std::string get_last_filename() = 0;
+    virtual ~FileReaderInterface() = default;
 };
 
 class FileReader : public FileReaderInterface {

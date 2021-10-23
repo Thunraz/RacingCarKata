@@ -1,5 +1,6 @@
 #include "HtmlTextConverter.h"
 #include <gmock/gmock.h>
+#include <memory>
 
 namespace {
 
@@ -114,6 +115,7 @@ TEST(FileReaderTest, FileReaderReturnsLastFilename)
 //    ASSERT_THROW(fn(), std::invalid_argument);
 //}
 
+// TODO: Move into a dedicated file
 class FileReaderMock : public FileReaderInterface {
 public:
     FileReaderMock(std::string const& content) { m_content = content; }
@@ -124,12 +126,16 @@ private:
     std::string m_content;
 };
 
+std::string convert_file_to_html(FileReaderInterface& file_reader){
+    return "abcd1234";
+}
+
 TEST(HtmlTextConverterTest, ConvertTextFileToHtml)
 {
     auto const input_string = "abcd1234";
-    std::unique_ptr<FileReaderInterface> file { nullptr };
+    FileReaderMock file_reader{input_string};
 
-    auto const converted_text = convert_file_to_html(file);
+    auto const converted_text = convert_file_to_html(file_reader);
     ASSERT_EQ(input_string, converted_text);
 }
 
