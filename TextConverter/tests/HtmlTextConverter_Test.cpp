@@ -98,18 +98,39 @@ TEST(FileReaderTest, FileReaderReturnsLastFilename)
     ASSERT_EQ("my_file.txt", reader.get_last_filename());
 }
 
-TEST(HtmlTextConverterTest, FileReaderThrowsExceptionForInvalidFilename)
+// TODO add this test later when we want to deal with the unhappy path
+// TODO Evaluate if we need that test at all
+// TEST(HtmlTextConverterTest, FileReaderThrowsExceptionForInvalidFilename)
+//{
+//    auto fn = []() {
+//        FileReader reader;
+//        try {
+//            reader.get_content("?invalid?");
+//        } catch (std::invalid_argument& e) {
+//            EXPECT_STREQ(e.what(), "Invalid file name");
+//            throw;
+//        }
+//    };
+//    ASSERT_THROW(fn(), std::invalid_argument);
+//}
+
+class FileReaderMock : public FileReaderInterface {
+public:
+    FileReaderMock(std::string const& content) { m_content = content; }
+    std::string get_content(std::string const& filename) override { return m_content; }
+    std::string get_last_filename() override { return ""; }
+
+private:
+    std::string m_content;
+};
+
+TEST(HtmlTextConverterTest, ConvertTextFileToHtml)
 {
-    auto fn = []() {
-        FileReader reader;
-        try {
-            reader.get_content("?invalid?");
-        } catch (std::invalid_argument& e) {
-            EXPECT_STREQ(e.what(), "Invalid file name");
-            throw;
-        }
-    };
-    ASSERT_THROW(fn(), std::invalid_argument);
+    auto const input_string = "abcd1234";
+    std::unique_ptr<FileReaderInterface> file { nullptr };
+
+    auto const converted_text = convert_file_to_html(file);
+    ASSERT_EQ(input_string, converted_text);
 }
 
 } // namespace
