@@ -1,7 +1,3 @@
-//
-// Created by pk on 10/23/2021.
-//
-
 #ifndef RACING_CAR_GMOCK_FILEREADER_HPP
 #define RACING_CAR_GMOCK_FILEREADER_HPP
 #include "FileReaderInterface.hpp"
