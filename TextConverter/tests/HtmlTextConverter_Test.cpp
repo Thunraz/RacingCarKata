@@ -2,6 +2,8 @@
 #include <gmock/gmock.h>
 #include <memory>
 
+using namespace ::testing;
+
 namespace {
 
 // TEST(HtmlTextConverterTest, ReturnsCorrectFilename)
@@ -119,8 +121,8 @@ TEST(FileReaderTest, FileReaderReturnsLastFilename)
 class FileReaderMock : public FileReaderInterface {
 public:
     FileReaderMock(std::string const& content) { m_content = content; }
-    std::string get_content(std::string const& filename) override { return m_content; }
     std::string get_last_filename() override { return ""; }
+    MOCK_METHOD(std::string, get_content, (std::string const&), (override));
 
 private:
     std::string m_content;
@@ -136,6 +138,18 @@ TEST(HtmlTextConverterTest, ConvertTextFileToHtml)
     FileReaderMock file_reader{input_string};
 
     auto const converted_text = convert_file_to_html(file_reader);
+    ASSERT_EQ(input_string, converted_text);
+}
+
+
+TEST(HtmlTextConverterTest, GetContentReturnsExpectedContent)
+{
+    auto const input_string = "abcd1234";
+    FileReaderMock file_reader{input_string};
+
+    auto const converted_text = convert_file_to_html(file_reader);
+    EXPECT_CALL(file_reader, get_content(_))
+        .WillOnce(Return("abcd1234"));
     ASSERT_EQ(input_string, converted_text);
 }
 
