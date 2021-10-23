@@ -1,5 +1,6 @@
 #include "FileReaderMock.hpp"
 #include "HtmlTextConverter.h"
+#include "FileReader.hpp"
 #include <gmock/gmock.h>
 #include <memory>
 
