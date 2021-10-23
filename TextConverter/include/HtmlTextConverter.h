@@ -12,11 +12,7 @@ private:
     std::string m_lastFilename { "" };
 
 public:
-    std::string get_content(std::string const& filename) override
-    {
-        m_lastFilename = filename;
-        return "";
-    }
+    std::string get_content(std::string const& filename) override;
 
     std::string get_last_filename() { return m_lastFilename; };
 };

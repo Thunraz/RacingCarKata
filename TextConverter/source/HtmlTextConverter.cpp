@@ -10,3 +10,9 @@ std::string convert_text_to_html(std::string const& text_to_convert)
     output = std::regex_replace(output, std::regex("[\n]"), "<br />\n");
     return output;
 }
+
+std::string FileReader::get_content(const std::string &filename) {
+    m_lastFilename = filename;
+
+    return "";
+}
