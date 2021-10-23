@@ -5,8 +5,7 @@
 
 class FileReaderMock : public FileReaderInterface {
 public:
-    std::string get_last_filename() override { return ""; }
-    MOCK_METHOD(std::string, get_content, (std::string const&), (override));
+    MOCK_METHOD(std::string, get_content, (), (override));
 };
 
 #endif // RACING_CAR_GMOCK_FILEREADERMOCK_HPP

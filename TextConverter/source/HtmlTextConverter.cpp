@@ -11,14 +11,12 @@ std::string convert_text_to_html(std::string const& text_to_convert)
     return output;
 }
 
-std::string FileReader::get_content(const std::string& filename)
+std::string FileReader::get_content()
 {
-    m_lastFilename = filename;
-
     return "";
 }
 
 std::string convert_file_to_html(FileReaderInterface& file_reader)
 {
-    return convert_text_to_html(file_reader.get_content(""));
+    return convert_text_to_html(file_reader.get_content());
 }

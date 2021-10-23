@@ -70,16 +70,9 @@ It&quot;s fast &amp; reliable.<br />
     ASSERT_EQ(result, expected);
 }
 
-TEST(FileReaderTest, FileReaderReturnsEmptyStringByDefault)
-{
-    FileReader reader;
-    ASSERT_EQ("", reader.get_last_filename());
-}
-
 TEST(FileReaderTest, FileReaderReturnsLastFilename)
 {
-    FileReader reader;
-    reader.get_content("my_file.txt");
+    FileReader reader{"my_file.txt"};
     ASSERT_EQ("my_file.txt", reader.get_last_filename());
 }
 
@@ -92,7 +85,7 @@ TEST_P(HtmlTextConverterParametrizedTestFixture, ConvertFileToHTMLWorksAsExpecte
     auto const input_string = GetParam().first;
     auto const expected_output = GetParam().second;
     FileReaderMock file_reader;
-    EXPECT_CALL(file_reader, get_content(_)).WillOnce(Return(input_string));
+    EXPECT_CALL(file_reader, get_content()).WillOnce(Return(input_string));
 
     auto const converted_text = convert_file_to_html(file_reader);
 

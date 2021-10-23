@@ -7,8 +7,7 @@
 
 class FileReaderInterface {
 public:
-    virtual std::string get_content(std::string const& filename) = 0;
-    virtual std::string get_last_filename() = 0;
+    virtual std::string get_content() = 0;
     virtual ~FileReaderInterface() = default;
 };
 
@@ -17,8 +16,10 @@ private:
     std::string m_lastFilename { "" };
 
 public:
-    std::string get_content(std::string const& filename) override;
-
+    FileReader(std::string const& filename): m_lastFilename{filename}{
+        
+    }
+    std::string get_content() override;
     std::string get_last_filename() { return m_lastFilename; };
 };
 
