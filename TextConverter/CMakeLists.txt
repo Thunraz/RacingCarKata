@@ -9,5 +9,5 @@ add_library(TextConverter
 	source/FileReader.cpp
 )
 target_include_directories(TextConverter PUBLIC include )
-set_property(TARGET TextConverter PROPERTY CXX_STANDARD 14)
+set_property(TARGET TextConverter PROPERTY CXX_STANDARD 17)
 add_subdirectory(tests)

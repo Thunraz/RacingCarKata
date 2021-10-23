@@ -2,7 +2,7 @@ if (USE_GOOGLE_TEST)
     add_executable(HtmlTextConverter_Test_Gmock
             HtmlTextConverter_Test.cpp
             )
-    set_property(TARGET HtmlTextConverter_Test_Gmock PROPERTY CXX_STANDARD 14)
+    set_property(TARGET HtmlTextConverter_Test_Gmock PROPERTY CXX_STANDARD 17)
     if (NOT USE_APPROVAL_TESTS)
         target_link_libraries(HtmlTextConverter_Test_Gmock
                 PRIVATE TextConverter
@@ -44,7 +44,7 @@ if (USE_GOOGLE_TEST)
                 ApprovalTests
                 )
     endif ()
-    set_property(TARGET HtmlPageConverter_Test_Gmock PROPERTY CXX_STANDARD 14)
+    set_property(TARGET HtmlPageConverter_Test_Gmock PROPERTY CXX_STANDARD 17)
     gtest_discover_tests(HtmlPageConverter_Test_Gmock)
 endif ()
 
@@ -52,7 +52,7 @@ if (USE_CATCH2)
     add_executable(HtmlTextConverter_Test_Catch
             HtmlTextConverter_catch.cpp
             )
-    set_property(TARGET HtmlTextConverter_Test_Catch PROPERTY CXX_STANDARD 14)
+    set_property(TARGET HtmlTextConverter_Test_Catch PROPERTY CXX_STANDARD 17)
     if (NOT USE_APPROVAL_TESTS)
         target_link_libraries(HtmlTextConverter_Test_Catch
                 PRIVATE TextConverter
@@ -73,7 +73,7 @@ if (USE_CATCH2)
     add_executable(HtmlPageConverter_catch
             HtmlPageConverter_catch.cpp
             )
-    set_property(TARGET HtmlPageConverter_catch PROPERTY CXX_STANDARD 14)
+    set_property(TARGET HtmlPageConverter_catch PROPERTY CXX_STANDARD 17)
     if (NOT USE_APPROVAL_TESTS)
         target_link_libraries(HtmlPageConverter_catch
                 PRIVATE TextConverter
