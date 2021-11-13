@@ -2,6 +2,7 @@
 if (USE_GOOGLE_TEST)
     add_executable(TelemetryDiagnosticControls_Gmock
             TelemetryDiagnosticControls_Test.cpp
+            TelemetryClient_Test.cpp
             )
 
     set_property(TARGET TelemetryDiagnosticControls_Gmock PROPERTY CXX_STANDARD 14)
