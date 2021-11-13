@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 project(Racing-Car-GMock)
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++17 -lstdc++fs")
+
 option(USE_CATCH2 "Add Catch2 based tests" OFF)
 option(USE_GOOGLE_TEST "Add Google Test based tests" ON)
 option(USE_APPROVAL_TESTS "Add Google Test based tests" ON)
