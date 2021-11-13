@@ -1,4 +1,5 @@
 #include "TicketDispenser.h"
+#include <TurnNumberSequence.h>
 #include <gmock/gmock.h>
 
 namespace {
@@ -17,7 +18,8 @@ INSTANTIATE_TEST_SUITE_P(TurnTicketTest, TurnTicketTestFixture, ::testing::Value
 
 TEST(TicketDispenser, InitialTicketHasNumber0)
 {
-    TicketDispenser ticket_dispenser;
+    TurnNumberSequence sequence;
+    TicketDispenser ticket_dispenser{sequence};
     auto ticket = ticket_dispenser.getTurnTicket();
 
     ASSERT_EQ(ticket.getTurnNumber(), 0);
@@ -25,7 +27,8 @@ TEST(TicketDispenser, InitialTicketHasNumber0)
 
 TEST(TicketDispenser, SecondTicketHasNumber1)
 {
-    TicketDispenser ticket_dispenser;
+    TurnNumberSequence sequence;
+    TicketDispenser ticket_dispenser{sequence};
     auto ticket = ticket_dispenser.getTurnTicket();
 
     ASSERT_EQ(ticket.getTurnNumber(), 1);

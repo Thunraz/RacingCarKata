@@ -7,3 +7,5 @@ int TurnNumberSequence::getNextTurnNumber()
 {
     return s_turnNumber++;
 }
+
+int TurnNumberSequence::Get() { return getNextTurnNumber(); }

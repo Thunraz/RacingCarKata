@@ -2,6 +2,7 @@ add_library(TicketDispenser
 	include/TurnNumberSequence.h
 	include/TurnTicket.h
 	include/TicketDispenser.h
+	include/TurnNumberSequenceInterface.hpp
 	source/TurnNumberSequence.cpp
 	source/TurnTicket.cpp
 	source/TicketDispenser.cpp

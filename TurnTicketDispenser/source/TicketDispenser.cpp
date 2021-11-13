@@ -4,6 +4,11 @@
 
 TurnTicket TicketDispenser::getTurnTicket()
 {
-    int newTurnNumber = TurnNumberSequence::getNextTurnNumber();
+    int newTurnNumber = m_sequenceInterface.Get();
     return TurnTicket(newTurnNumber);
+}
+
+TicketDispenser::TicketDispenser(TurnNumberSequenceInterface& sequenceInterface)
+    : m_sequenceInterface { sequenceInterface }
+{
 }
