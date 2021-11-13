@@ -3,7 +3,7 @@
 
 int TurnNumberSequence::getNextTurnNumber()
 {
-    auto lock = std::unique_lock<std::mutex> { m_mutex };
+    std::lock_guard<std::mutex> lock{ m_mutex };
     return m_turnNumber++;
 }
 
