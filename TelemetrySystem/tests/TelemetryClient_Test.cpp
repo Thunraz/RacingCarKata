@@ -1,4 +1,5 @@
 #include "TelemetryClient.h"
+#include "TelemetryClientInterface.hpp"
 #include <gmock/gmock.h>
 
 namespace {

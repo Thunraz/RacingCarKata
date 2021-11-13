@@ -1,9 +1,10 @@
 #pragma once
 
-#include <string>
+#include "TelemetryClientInterface.hpp"
 #include <random>
+#include <string>
 
-class TelemetryClient
+class TelemetryClient : public TelemetryClientInterface
 {
     bool m_onlineStatus;
     std::string m_diagnosticMessageResult;

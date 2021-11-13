@@ -1,5 +1,6 @@
 
 #include "../include/TelemetryDiagnosticControls.h"
+#include "TelemetryClientInterface.hpp"
 
 #include <stdexcept>
 
