@@ -9,12 +9,12 @@ class TelemetryDiagnosticControls {
     std::string m_diagnosticChannelConnectionString;
     TelemetryClient m_telemetryClient;
 
-    std::unique_ptr<TelemetryClientInterface> m_telemetryClientNew;
+    std::shared_ptr<TelemetryClientInterface> m_telemetryClientNew;
     std::string m_diagnosticInfo;
 
 public:
     TelemetryDiagnosticControls();
-    TelemetryDiagnosticControls(std::unique_ptr<TelemetryClientInterface> telemtryClient);
+    TelemetryDiagnosticControls(std::shared_ptr<TelemetryClientInterface> telemetryClient);
 
     std::string getDiagnosticInfo();
 

@@ -13,7 +13,7 @@ public:
 namespace {
 TEST(TelemetrySystem, GetDiagnosticInfoReturnsEmptyString)
 {
-    auto client_mock = std::make_unique<TelemetryClientMock>();
+    auto client_mock = std::make_shared<TelemetryClientMock>();
     TelemetryDiagnosticControls controls { std::move(client_mock) };
 
     EXPECT_EQ(controls.getDiagnosticInfo(), "");
@@ -21,7 +21,7 @@ TEST(TelemetrySystem, GetDiagnosticInfoReturnsEmptyString)
 
 TEST(TelemetrySystem, GetDiagnosticInfoReturnsSetString)
 {
-    auto client_mock = std::make_unique<TelemetryClientMock>();
+    auto client_mock = std::make_shared<TelemetryClientMock>();
     TelemetryDiagnosticControls controls { std::move(client_mock) };
 
     const auto diagnosticInfo = "Hello, World!";
@@ -30,29 +30,19 @@ TEST(TelemetrySystem, GetDiagnosticInfoReturnsSetString)
     EXPECT_EQ(controls.getDiagnosticInfo(), diagnosticInfo);
 }
 
-TEST(TelemetrySystem, CheckTransmission)
-{
-    auto client_mock = std::make_unique<TelemetryClientMock>();
-    TelemetryDiagnosticControls controls { std::move(client_mock) };
-
-    controls.checkTransmission();
-
-    const auto diagnosticInfo = controls.getDiagnosticInfo();
-
-    EXPECT_NE(diagnosticInfo, "");
-}
-
 TEST(TelemetrySystem, CheckTransmissionCallsDisconnect)
 {
-    auto client_mock = std::make_unique<TelemetryClientMock>();
+    auto client_mock = std::make_shared<::testing::NiceMock<TelemetryClientMock>>();
     EXPECT_CALL(*client_mock, disconnect).Times(1);
-    TelemetryDiagnosticControls controls { std::move(client_mock) };
+    EXPECT_CALL(*client_mock, getOnlineStatus).WillRepeatedly(::testing::Return(true));
+    EXPECT_CALL(*client_mock, receive).WillOnce(::testing::Return("not empty"));
+    TelemetryDiagnosticControls controls { client_mock };
 
     controls.checkTransmission();
 
     const auto diagnosticInfo = controls.getDiagnosticInfo();
 
-    EXPECT_NE(diagnosticInfo, "");
+    EXPECT_EQ(diagnosticInfo, "not empty");
 }
 
 } // namespace

@@ -5,10 +5,10 @@
 #include <utility>
 
 TelemetryDiagnosticControls::TelemetryDiagnosticControls(
-    std::unique_ptr<TelemetryClientInterface> telemtryClient)
+    std::shared_ptr<TelemetryClientInterface> telemetryClient)
     : m_diagnosticChannelConnectionString("*111#")
     , m_telemetryClient()
-    , m_telemetryClientNew { std::move(telemtryClient) }
+    , m_telemetryClientNew { telemetryClient }
     , m_diagnosticInfo()
 {
 }
@@ -31,18 +31,18 @@ void TelemetryDiagnosticControls::checkTransmission()
 {
     m_diagnosticInfo = "";
 
-    m_telemetryClient.disconnect();
+    m_telemetryClientNew->disconnect();
 
     int retryLeft = 3;
-    while (m_telemetryClient.getOnlineStatus() == false && retryLeft > 0) {
-        m_telemetryClient.connect(m_diagnosticChannelConnectionString);
+    while (m_telemetryClientNew->getOnlineStatus() == false && retryLeft > 0) {
+        m_telemetryClientNew->connect(m_diagnosticChannelConnectionString);
         retryLeft -= 1;
     }
 
-    if (m_telemetryClient.getOnlineStatus() == false) {
+    if (m_telemetryClientNew->getOnlineStatus() == false) {
         throw std::invalid_argument("Unable to connect");
     }
 
-    m_telemetryClient.send(TelemetryClient::DIAGNOSTIC_MESSAGE);
-    m_diagnosticInfo = m_telemetryClient.receive();
+    m_telemetryClientNew->send(TelemetryClient::DIAGNOSTIC_MESSAGE);
+    m_diagnosticInfo = m_telemetryClientNew->receive();
 }
