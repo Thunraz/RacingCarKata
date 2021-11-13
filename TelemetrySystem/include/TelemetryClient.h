@@ -16,13 +16,13 @@ public:
     
     TelemetryClient();
 
-    bool getOnlineStatus();
+    bool getOnlineStatus() override;
 
-    void connect(std::string const& telemetryServerConnectionString);
+    void connect(std::string const& telemetryServerConnectionString) override;
 
-    void disconnect();
+    void disconnect() override;
 
-    void send(std::string const& message);
+    void send(std::string const& message) override;
 
-    std::string receive();
+    std::string receive() override;
 };
