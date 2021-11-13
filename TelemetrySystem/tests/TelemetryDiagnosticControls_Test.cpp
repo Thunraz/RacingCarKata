@@ -1,11 +1,8 @@
 #include "TelemetryDiagnosticControls.h"
 #include <gmock/gmock.h>
 
-class TelemetryClientMock : public TelemetryClientInterface
-{
+class TelemetryClientMock : public TelemetryClientInterface {
 public:
-    TelemetryClientMock();
-
     MOCK_METHOD(bool, getOnlineStatus, (), (override));
     MOCK_METHOD(void, connect, (std::string const& telemetryServerConnectionString), (override));
     MOCK_METHOD(void, disconnect, (), (override));
@@ -16,14 +13,16 @@ public:
 namespace {
 TEST(TelemetrySystem, GetDiagnosticInfoReturnsEmptyString)
 {
-    TelemetryDiagnosticControls controls;
+    auto client_mock = std::make_unique<TelemetryClientMock>();
+    TelemetryDiagnosticControls controls { std::move(client_mock) };
 
     EXPECT_EQ(controls.getDiagnosticInfo(), "");
 }
 
 TEST(TelemetrySystem, GetDiagnosticInfoReturnsSetString)
 {
-    TelemetryDiagnosticControls controls;
+    auto client_mock = std::make_unique<TelemetryClientMock>();
+    TelemetryDiagnosticControls controls { std::move(client_mock) };
 
     const auto diagnosticInfo = "Hello, World!";
     controls.setDiagnosticInfo(diagnosticInfo);
@@ -33,11 +32,27 @@ TEST(TelemetrySystem, GetDiagnosticInfoReturnsSetString)
 
 TEST(TelemetrySystem, CheckTransmission)
 {
-    TelemetryDiagnosticControls controls;
+    auto client_mock = std::make_unique<TelemetryClientMock>();
+    TelemetryDiagnosticControls controls { std::move(client_mock) };
+
     controls.checkTransmission();
 
     const auto diagnosticInfo = controls.getDiagnosticInfo();
 
     EXPECT_NE(diagnosticInfo, "");
 }
+
+TEST(TelemetrySystem, CheckTransmissionCallsDisconnect)
+{
+    auto client_mock = std::make_unique<TelemetryClientMock>();
+    EXPECT_CALL(*client_mock, disconnect).Times(1);
+    TelemetryDiagnosticControls controls { std::move(client_mock) };
+
+    controls.checkTransmission();
+
+    const auto diagnosticInfo = controls.getDiagnosticInfo();
+
+    EXPECT_NE(diagnosticInfo, "");
+}
+
 } // namespace
