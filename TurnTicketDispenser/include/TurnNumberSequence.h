@@ -1,13 +1,12 @@
 #pragma once
 #include "TurnNumberSequenceInterface.hpp"
 
-class TurnNumberSequence : public TurnNumberSequenceInterface
-{
-    static int s_turnNumber;
+class TurnNumberSequence : public TurnNumberSequenceInterface {
+    int m_turnNumber { 0 };
 
 public:
     int Get() override;
 
 public:
-    static int getNextTurnNumber();
+    int getNextTurnNumber();
 };
