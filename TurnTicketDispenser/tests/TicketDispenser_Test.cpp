@@ -1,6 +1,8 @@
 #include "TicketDispenser.h"
 #include <TurnNumberSequence.h>
 #include <gmock/gmock.h>
+#include <thread>
+#include <future>
 
 namespace {
 
@@ -52,6 +54,47 @@ TEST(TurnNumberSequenceTest, SecondCallReturnsOne)
     TurnNumberSequence sequence;
     (void)sequence.Get();
     EXPECT_EQ(sequence.Get(), 1);
+}
+
+TEST(TurnNumberSequenceTest, TwoDispensersWontReturnSameNumber)
+{
+    TurnNumberSequence sequence;
+
+    TicketDispenser dispenser1 { sequence };
+    TicketDispenser dispenser2 { sequence };
+
+    auto result1 = dispenser1.getTurnTicket();
+    auto result2 = dispenser2.getTurnTicket();
+
+    EXPECT_NE(result1.getTurnNumber(), result2.getTurnNumber());
+}
+
+TEST(TurnNumberSequenceTest, TwoDispensersWorkInMultiprocessing)
+{
+    TurnNumberSequence sequence;
+
+    std::promise<int> p1;
+    std::thread t1{ [&sequence, &p1](){
+        TicketDispenser dispenser { sequence };
+        auto result = dispenser.getTurnTicket();
+
+        p1.set_value(result.getTurnNumber());
+    } };
+    t1.detach();
+
+    std::promise<int> p2;
+    std::thread t2{ [&sequence, &p2](){
+        TicketDispenser dispenser { sequence };
+        auto result = dispenser.getTurnTicket();
+
+        p2.set_value(result.getTurnNumber());
+    } };
+    t2.detach();
+
+    auto result1 = p1.get_future().get();
+    auto result2 = p2.get_future().get();
+
+    EXPECT_NE(result1, result2);
 }
 
 } // namespace
