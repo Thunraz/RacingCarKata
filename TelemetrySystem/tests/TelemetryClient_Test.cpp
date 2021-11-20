@@ -9,31 +9,56 @@ class TelemetryConnectionMock : public TelemetryConnectionInterface {
 public:
     MOCK_METHOD(std::string, receive, (), (override));
     MOCK_METHOD(bool, connect, (), (override));
+    MOCK_METHOD(std::string, send, (), (override));
 };
 
-TEST(TelemetryClient, InitialStatusIsOffline)
-{
+class BasicTelemetryClientTest : public ::testing::Test {
+public:
     TelemetryClient tc;
+};
+
+TEST_F(BasicTelemetryClientTest, InitialStatusIsOffline) { ASSERT_FALSE(tc.getOnlineStatus()); }
+
+TEST_F(BasicTelemetryClientTest, ConnectWithEmptyConnectStringRaisesException)
+{
+    EXPECT_THROW(tc.connect(""), std::invalid_argument);
+}
+
+TEST_F(BasicTelemetryClientTest, OnlineStatusAfterDisconnect)
+{
+    tc.connect("abcd");
+    tc.disconnect();
 
     ASSERT_FALSE(tc.getOnlineStatus());
 }
 
-TEST(TelemetryClient, ConnectWithEmptyConnectStringRaisesException)
+TEST_F(BasicTelemetryClientTest, SendEmptyMessageWillRaiseException)
 {
-    TelemetryClient tc;
-
-    EXPECT_THROW(tc.connect(""), std::invalid_argument);
+    EXPECT_THROW(tc.send(""), std::invalid_argument);
 }
 
-TEST(TelemetryClient, OnlineStatusAfterConnect)
+TEST_F(BasicTelemetryClientTest, SendMessageWithContentWillNotRaiseException)
 {
-    auto connectionMock = std::make_shared<TelemetryConnectionMock>();
-    TelemetryClient tc(connectionMock);
+    EXPECT_NO_THROW(tc.send("abcd"));
+}
 
+class MockedTelemetryClientTest : public ::testing::Test {
+public:
+    std::unique_ptr<TelemetryClient> tc;
+    std::shared_ptr<TelemetryConnectionMock> connectionMock;
+    void SetUp() override
+    {
+        connectionMock = std::make_shared<TelemetryConnectionMock>();
+        tc = std::make_unique<TelemetryClient>(connectionMock);
+    }
+};
+
+TEST_F(MockedTelemetryClientTest, OnlineStatusAfterConnect)
+{
     EXPECT_CALL(*connectionMock, connect).WillOnce(::testing::Return(true));
-    tc.connect("abcd");
+    tc->connect("abcd");
 
-    ASSERT_TRUE(tc.getOnlineStatus());
+    ASSERT_TRUE(tc->getOnlineStatus());
 }
 
 TEST(TelemetryClient, OnlineStatusAfterConnectFails)
@@ -47,34 +72,16 @@ TEST(TelemetryClient, OnlineStatusAfterConnectFails)
     ASSERT_FALSE(tc.getOnlineStatus());
 }
 
-TEST(TelemetryClient, OnlineStatusAfterDisconnect)
+TEST(TelemetryClient, ReceiveAfterSend)
 {
-    TelemetryClient tc;
-    tc.connect("abcd");
-    tc.disconnect();
-
-    ASSERT_FALSE(tc.getOnlineStatus());
-}
-
-TEST(TelemetryClient, SendEmptyMessageWillRaiseException)
-{
-    TelemetryClient tc;
-    EXPECT_THROW(tc.send(""), std::invalid_argument);
-}
-
-TEST(TelemetryClient, SendMessageWithContentWillNotRaiseException)
-{
-    TelemetryClient tc;
-    EXPECT_NO_THROW(tc.send("abcd"));
-}
-
-TEST(TelemetryClient, FirstSendAndThenReceive)
-{
-    TelemetryClient tc;
-    tc.send("message");
+    auto connectionMock = std::make_shared<TelemetryConnectionMock>();
+    auto const expectedSendDiagnosticMessage = "ABCD1111";
+    EXPECT_CALL(*connectionMock, send).WillOnce(::testing::Return(expectedSendDiagnosticMessage));
+    TelemetryClient tc { connectionMock };
+    tc.send(TelemetryClient::DIAGNOSTIC_MESSAGE);
     auto const received_message = tc.receive();
 
-    EXPECT_NE(received_message, "");
+    EXPECT_EQ(received_message, expectedSendDiagnosticMessage);
 }
 
 TEST(TelemetryClient, ReceiveWithoutSend)
@@ -84,7 +91,7 @@ TEST(TelemetryClient, ReceiveWithoutSend)
     auto const expectedString = "ABCD1234";
     EXPECT_CALL(*connectionMock, receive).WillOnce(::testing::Return(expectedString));
 
-    TelemetryClient tc {connectionMock };
+    TelemetryClient tc { connectionMock };
     auto const received_message = tc.receive();
 
     ASSERT_EQ(received_message, expectedString);
