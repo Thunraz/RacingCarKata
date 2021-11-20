@@ -13,6 +13,8 @@ public:
 
     std::string receive() override;
 
+    std::string send() override;
+
 private:
     std::seed_seq m_seed;
     std::mt19937 m_generator;

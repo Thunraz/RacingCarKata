@@ -36,6 +36,17 @@ TEST(TelemetryClient, OnlineStatusAfterConnect)
     ASSERT_TRUE(tc.getOnlineStatus());
 }
 
+TEST(TelemetryClient, OnlineStatusAfterConnectFails)
+{
+    auto connectionMock = std::make_shared<TelemetryConnectionMock>();
+    TelemetryClient tc(connectionMock);
+
+    EXPECT_CALL(*connectionMock, connect).WillOnce(::testing::Return(false));
+    tc.connect("abcd");
+
+    ASSERT_FALSE(tc.getOnlineStatus());
+}
+
 TEST(TelemetryClient, OnlineStatusAfterDisconnect)
 {
     TelemetryClient tc;
@@ -57,7 +68,14 @@ TEST(TelemetryClient, SendMessageWithContentWillNotRaiseException)
     EXPECT_NO_THROW(tc.send("abcd"));
 }
 
+TEST(TelemetryClient, FirstSendAndThenReceive)
+{
+    TelemetryClient tc;
+    tc.send("message");
+    auto const received_message = tc.receive();
 
+    EXPECT_NE(received_message, "");
+}
 
 TEST(TelemetryClient, ReceiveWithoutSend)
 {

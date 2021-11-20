@@ -22,3 +22,20 @@ std::string TelemetryConnectionRandom::receive()
     }
     return message;
 }
+
+std::string TelemetryConnectionRandom::send() {
+    return R"(LAST TX rate................ 100 MBPS
+HIGHEST TX rate............. 100 MBPS
+LAST RX rate................ 100 MBPS
+HIGHEST RX rate............. 100 MBPS
+BIT RATE.................... 100000000
+WORD LEN.................... 16
+WORD/FRAME.................. 511
+BITS/FRAME.................. 8192
+MODULATION TYPE............. PCM/FM
+TX Digital Los.............. 0.75
+RX Digital Los.............. 0.10
+BEP Test.................... -5
+Local Rtrn Count............ 00
+Remote Rtrn Count........... 00)";
+}

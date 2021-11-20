@@ -10,6 +10,8 @@ public:
     virtual bool connect() = 0;
 
     virtual std::string receive() = 0;
+
+    virtual std::string send() = 0;
 };
 
 #endif // RACING_CAR_GMOCK_TELEMETRYCONNECTIONINTERFACE_HPP
