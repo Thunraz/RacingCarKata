@@ -5,9 +5,12 @@
 
 std::string const TelemetryClient::DIAGNOSTIC_MESSAGE = "AT#UD";
 
-TelemetryClient::TelemetryClient()
-    : m_onlineStatus(false)
+TelemetryClient::TelemetryClient(std::shared_ptr<TelemetryMessageReceiverInterface> messageReceiver)
+    : m_messageReceiver(messageReceiver)
+    , m_onlineStatus(false)
     , m_diagnosticMessageResult()
+    , m_seed({42})
+    , m_generator(m_seed)
 {
 }
 
