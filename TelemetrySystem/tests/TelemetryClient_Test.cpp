@@ -1,6 +1,8 @@
 #include "TelemetryClient.h"
 #include "TelemetryClientInterface.hpp"
+#include "TelemetryMessageReceiverInterface.hpp"
 #include <gmock/gmock.h>
+#include <memory>
 
 namespace {
 TEST(TelemetryClient, InitialStatusIsOffline)
@@ -47,9 +49,15 @@ TEST(TelemetryClient, SendMessageWithContentWillNotRaiseException)
     EXPECT_NO_THROW(tc.send("abcd"));
 }
 
+class TelemetryMessageReceiverMock : public TelemetryMessageReceiverInterface {
+public:
+    MOCK_METHOD(std::string, receive, (), (override));
+};
+
 TEST(TelemetryClient, ReceiveWithoutSend)
 {
-    TelemetryClient tc;
+    auto messageReceiver = std::make_shared<::testing::NiceMock<TelemetryMessageReceiverMock>>();
+    TelemetryClient tc { messageReceiver };
     auto const received_message = tc.receive();
 
     ASSERT_EQ(received_message, "");

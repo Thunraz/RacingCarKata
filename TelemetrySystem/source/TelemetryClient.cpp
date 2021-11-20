@@ -2,6 +2,7 @@
 #include "../include/TelemetryClient.h"
 
 #include <stdexcept>
+#include "TelemetryMessageReceiverRandom.hpp"
 
 std::string const TelemetryClient::DIAGNOSTIC_MESSAGE = "AT#UD";
 
@@ -12,6 +13,9 @@ TelemetryClient::TelemetryClient(std::shared_ptr<TelemetryMessageReceiverInterfa
     , m_seed({42})
     , m_generator(m_seed)
 {
+    if(messageReceiver == nullptr) {
+        m_messageReceiver = std::make_shared<TelemetryMessageReceiverRandom>();
+    }
 }
 
 bool TelemetryClient::getOnlineStatus() { return m_onlineStatus; }
@@ -60,7 +64,7 @@ std::string TelemetryClient::receive()
 
     if (m_diagnosticMessageResult.empty()) {
         // simulate a received message (just for illustration - not needed for this exercise)
-
+        message = m_messageReceiver->receive();
     } else {
         message = m_diagnosticMessageResult;
         m_diagnosticMessageResult = "";
