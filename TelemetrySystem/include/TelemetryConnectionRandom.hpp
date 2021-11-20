@@ -1,15 +1,17 @@
-#include "TelemetryMessageReceiverInterface.hpp"
+#include "TelemetryConnectionInterface.hpp"
 #include <random>
 #include <string>
 
 #ifndef RACING_CAR_GMOCK_TELEMETRYMESSAGERECEIVERRANDOM_HPP
 #define RACING_CAR_GMOCK_TELEMETRYMESSAGERECEIVERRANDOM_HPP
 
-class TelemetryMessageReceiverRandom : public TelemetryMessageReceiverInterface {
+class TelemetryConnectionRandom : public TelemetryConnectionInterface {
 public:
-    std::string receive() override;
+    TelemetryConnectionRandom();
 
-    TelemetryMessageReceiverRandom();
+    bool connect() override;
+
+    std::string receive() override;
 
 private:
     std::seed_seq m_seed;

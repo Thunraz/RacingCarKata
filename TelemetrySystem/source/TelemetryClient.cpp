@@ -1,20 +1,20 @@
 
 #include "../include/TelemetryClient.h"
 
+#include "TelemetryConnectionRandom.hpp"
 #include <stdexcept>
-#include "TelemetryMessageReceiverRandom.hpp"
 
 std::string const TelemetryClient::DIAGNOSTIC_MESSAGE = "AT#UD";
 
-TelemetryClient::TelemetryClient(std::shared_ptr<TelemetryMessageReceiverInterface> messageReceiver)
-    : m_messageReceiver(messageReceiver)
+TelemetryClient::TelemetryClient(std::shared_ptr<TelemetryConnectionInterface> telemetryConnection)
+    : m_telemetryConnection(telemetryConnection)
     , m_onlineStatus(false)
     , m_diagnosticMessageResult()
-    , m_seed({42})
+    , m_seed({ 42 })
     , m_generator(m_seed)
 {
-    if(messageReceiver == nullptr) {
-        m_messageReceiver = std::make_shared<TelemetryMessageReceiverRandom>();
+    if (telemetryConnection == nullptr) {
+        m_telemetryConnection = std::make_shared<TelemetryConnectionRandom>();
     }
 }
 
@@ -26,10 +26,7 @@ void TelemetryClient::connect(std::string const& telemetryServerConnectionString
         throw std::invalid_argument("Telemetry server connection string is empty");
     }
 
-    // simulate the operation on a real modem
-    bool success = std::uniform_int_distribution<>(0, 9)(m_generator) <= 8;
-
-    m_onlineStatus = success;
+    m_onlineStatus = m_telemetryConnection->connect();
 }
 
 void TelemetryClient::disconnect() { m_onlineStatus = false; }
@@ -63,8 +60,8 @@ std::string TelemetryClient::receive()
     std::string message;
 
     if (m_diagnosticMessageResult.empty()) {
-        // simulate a received message (just for illustration - not needed for this exercise)
-        message = m_messageReceiver->receive();
+
+        message = m_telemetryConnection->receive();
     } else {
         message = m_diagnosticMessageResult;
         m_diagnosticMessageResult = "";

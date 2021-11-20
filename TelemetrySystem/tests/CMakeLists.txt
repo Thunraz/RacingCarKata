@@ -14,7 +14,7 @@ if (USE_GOOGLE_TEST)
                 PRIVATE gmock_main
                 ${CMAKE_THREAD_LIBS_INIT}
                 )
-    else()
+    else ()
         target_link_libraries(TelemetryDiagnosticControls_Gmock
                 PRIVATE TelemetrySystem
                 PRIVATE gtest
@@ -24,7 +24,8 @@ if (USE_GOOGLE_TEST)
                 ApprovalTests
                 )
     endif ()
-    gtest_discover_tests(TelemetryDiagnosticControls_Gmock)
+
+    add_test(TelemetryDiagnosticControls_Gmock TelemetryDiagnosticControls_Gmock)
 endif ()
 
 if (USE_CATCH2)
@@ -38,7 +39,7 @@ if (USE_CATCH2)
                 PRIVATE TelemetrySystem
                 PRIVATE Catch2::Catch2
                 )
-    else()
+    else ()
         target_link_libraries(TelemetryDiagnosticControls_Test_Catch
                 PRIVATE TelemetrySystem
                 PRIVATE Catch2::Catch2

@@ -1,6 +1,6 @@
 #include "TelemetryClient.h"
 #include "TelemetryClientInterface.hpp"
-#include "TelemetryMessageReceiverInterface.hpp"
+#include "TelemetryConnectionInterface.hpp"
 #include <gmock/gmock.h>
 #include <memory>
 
@@ -49,18 +49,23 @@ TEST(TelemetryClient, SendMessageWithContentWillNotRaiseException)
     EXPECT_NO_THROW(tc.send("abcd"));
 }
 
-class TelemetryMessageReceiverMock : public TelemetryMessageReceiverInterface {
+class TelemetryMessageReceiverMock : public TelemetryConnectionInterface {
 public:
     MOCK_METHOD(std::string, receive, (), (override));
+    MOCK_METHOD(bool, connect, (), (override));
 };
 
 TEST(TelemetryClient, ReceiveWithoutSend)
 {
-    auto messageReceiver = std::make_shared<::testing::NiceMock<TelemetryMessageReceiverMock>>();
+    auto messageReceiver = std::make_shared<TelemetryMessageReceiverMock>();
+
+    auto const expectedString = "ABCD1234";
+    EXPECT_CALL(*messageReceiver, receive).WillOnce(::testing::Return(expectedString));
+
     TelemetryClient tc { messageReceiver };
     auto const received_message = tc.receive();
 
-    ASSERT_EQ(received_message, "");
+    ASSERT_EQ(received_message, expectedString);
 }
 
 } // namespace

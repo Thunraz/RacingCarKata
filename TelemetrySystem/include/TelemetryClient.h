@@ -1,14 +1,13 @@
 #pragma once
 
 #include "TelemetryClientInterface.hpp"
-#include "TelemetryMessageReceiverInterface.hpp"
+#include "TelemetryConnectionInterface.hpp"
+#include <memory>
 #include <random>
 #include <string>
-#include <memory>
-
 
 class TelemetryClient : public TelemetryClientInterface {
-    std::shared_ptr<TelemetryMessageReceiverInterface> m_messageReceiver;
+    std::shared_ptr<TelemetryConnectionInterface> m_telemetryConnection;
     bool m_onlineStatus;
     std::string m_diagnosticMessageResult;
     std::seed_seq m_seed;
@@ -17,7 +16,7 @@ class TelemetryClient : public TelemetryClientInterface {
 public:
     static std::string const DIAGNOSTIC_MESSAGE;
 
-    TelemetryClient(std::shared_ptr<TelemetryMessageReceiverInterface> messageReceiver = nullptr);
+    TelemetryClient(std::shared_ptr<TelemetryConnectionInterface> telemetryConnection = nullptr);
 
     bool getOnlineStatus() override;
 
