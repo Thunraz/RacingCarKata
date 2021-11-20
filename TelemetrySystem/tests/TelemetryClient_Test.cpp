@@ -47,7 +47,7 @@ TEST(TelemetryClient, SendMessageWithContentWillNotRaiseException)
     EXPECT_NO_THROW(tc.send("abcd"));
 }
 
-TEST(TelemetryClient, DISABLED_ReceiveWithoutSend)
+TEST(TelemetryClient, ReceiveWithoutSend)
 {
     TelemetryClient tc;
     auto const received_message = tc.receive();
