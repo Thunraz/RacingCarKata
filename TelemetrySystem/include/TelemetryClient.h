@@ -10,8 +10,6 @@ class TelemetryClient : public TelemetryClientInterface {
     std::shared_ptr<TelemetryConnectionInterface> m_telemetryConnection;
     bool m_onlineStatus;
     std::string m_diagnosticMessageResult;
-    std::seed_seq m_seed;
-    std::mt19937 m_generator;
 
 public:
     static std::string const DIAGNOSTIC_MESSAGE;

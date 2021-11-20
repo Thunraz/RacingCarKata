@@ -1,5 +1,4 @@
 #include "TelemetryClient.h"
-#include "TelemetryClientInterface.hpp"
 #include "TelemetryConnectionInterface.hpp"
 #include <gmock/gmock.h>
 #include <memory>
@@ -61,38 +60,30 @@ TEST_F(MockedTelemetryClientTest, OnlineStatusAfterConnect)
     ASSERT_TRUE(tc->getOnlineStatus());
 }
 
-TEST(TelemetryClient, OnlineStatusAfterConnectFails)
+TEST_F(MockedTelemetryClientTest, OnlineStatusAfterConnectFails)
 {
-    auto connectionMock = std::make_shared<TelemetryConnectionMock>();
-    TelemetryClient tc(connectionMock);
-
     EXPECT_CALL(*connectionMock, connect).WillOnce(::testing::Return(false));
-    tc.connect("abcd");
+    tc->connect("abcd");
 
-    ASSERT_FALSE(tc.getOnlineStatus());
+    ASSERT_FALSE(tc->getOnlineStatus());
 }
 
-TEST(TelemetryClient, ReceiveAfterSend)
+TEST_F(MockedTelemetryClientTest, ReceiveAfterSend)
 {
-    auto connectionMock = std::make_shared<TelemetryConnectionMock>();
     auto const expectedSendDiagnosticMessage = "ABCD1111";
     EXPECT_CALL(*connectionMock, send).WillOnce(::testing::Return(expectedSendDiagnosticMessage));
-    TelemetryClient tc { connectionMock };
-    tc.send(TelemetryClient::DIAGNOSTIC_MESSAGE);
-    auto const received_message = tc.receive();
+    tc->send(TelemetryClient::DIAGNOSTIC_MESSAGE);
+    auto const received_message = tc->receive();
 
     EXPECT_EQ(received_message, expectedSendDiagnosticMessage);
 }
 
-TEST(TelemetryClient, ReceiveWithoutSend)
+TEST_F(MockedTelemetryClientTest, ReceiveWithoutSend)
 {
-    auto connectionMock = std::make_shared<TelemetryConnectionMock>();
-
     auto const expectedString = "ABCD1234";
     EXPECT_CALL(*connectionMock, receive).WillOnce(::testing::Return(expectedString));
 
-    TelemetryClient tc { connectionMock };
-    auto const received_message = tc.receive();
+    auto const received_message = tc->receive();
 
     ASSERT_EQ(received_message, expectedString);
 }

@@ -10,8 +10,6 @@ TelemetryClient::TelemetryClient(std::shared_ptr<TelemetryConnectionInterface> t
     : m_telemetryConnection(telemetryConnection)
     , m_onlineStatus(false)
     , m_diagnosticMessageResult()
-    , m_seed({ 42 })
-    , m_generator(m_seed)
 {
     if (telemetryConnection == nullptr) {
         m_telemetryConnection = std::make_shared<TelemetryConnectionRandom>();
