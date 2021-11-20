@@ -5,6 +5,12 @@
 #include <memory>
 
 namespace {
+class TelemetryConnectionMock : public TelemetryConnectionInterface {
+public:
+    MOCK_METHOD(std::string, receive, (), (override));
+    MOCK_METHOD(bool, connect, (), (override));
+};
+
 TEST(TelemetryClient, InitialStatusIsOffline)
 {
     TelemetryClient tc;
@@ -19,10 +25,12 @@ TEST(TelemetryClient, ConnectWithEmptyConnectStringRaisesException)
     EXPECT_THROW(tc.connect(""), std::invalid_argument);
 }
 
-// TODO Will fail randomly
 TEST(TelemetryClient, OnlineStatusAfterConnect)
 {
-    TelemetryClient tc;
+    auto connectionMock = std::make_shared<TelemetryConnectionMock>();
+    TelemetryClient tc(connectionMock);
+
+    EXPECT_CALL(*connectionMock, connect).WillOnce(::testing::Return(true));
     tc.connect("abcd");
 
     ASSERT_TRUE(tc.getOnlineStatus());
@@ -49,20 +57,16 @@ TEST(TelemetryClient, SendMessageWithContentWillNotRaiseException)
     EXPECT_NO_THROW(tc.send("abcd"));
 }
 
-class TelemetryMessageReceiverMock : public TelemetryConnectionInterface {
-public:
-    MOCK_METHOD(std::string, receive, (), (override));
-    MOCK_METHOD(bool, connect, (), (override));
-};
+
 
 TEST(TelemetryClient, ReceiveWithoutSend)
 {
-    auto messageReceiver = std::make_shared<TelemetryMessageReceiverMock>();
+    auto connectionMock = std::make_shared<TelemetryConnectionMock>();
 
     auto const expectedString = "ABCD1234";
-    EXPECT_CALL(*messageReceiver, receive).WillOnce(::testing::Return(expectedString));
+    EXPECT_CALL(*connectionMock, receive).WillOnce(::testing::Return(expectedString));
 
-    TelemetryClient tc { messageReceiver };
+    TelemetryClient tc {connectionMock };
     auto const received_message = tc.receive();
 
     ASSERT_EQ(received_message, expectedString);
