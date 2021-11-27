@@ -10,10 +10,6 @@ Race::Race(std::string const& name, std::list<std::shared_ptr<Driver>> const& dr
     : m_name(name)
     , m_results(drivers)
 {
-    for (auto const driver : m_results) {
-        std::string driverName = driver->getName();
-        m_driverNames[driver] = driverName;
-    }
 }
 
 int Race::position(std::shared_ptr<Driver> const& driver)
@@ -32,6 +28,6 @@ int Race::getPoints(std::shared_ptr<Driver> driver) { return POINTS[position(dri
 
 std::list<std::shared_ptr<Driver>> Race::getResults() { return m_results; }
 
-std::string Race::getDriverName(std::shared_ptr<Driver> driver) { return m_driverNames[driver]; }
+std::string Race::getDriverName(std::shared_ptr<Driver> driver) { return driver->getDisplayName(); }
 
 std::string Race::toString() { return m_name; }

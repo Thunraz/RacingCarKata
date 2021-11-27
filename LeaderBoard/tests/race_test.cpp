@@ -40,32 +40,37 @@ TEST(RaceTest, GetDriverNameForRegularDriver)
 
     EXPECT_EQ(race.getDriverName(driver), expectedName);
 }
-//
-//TEST(RaceTest, GetDriverNameForSelfDrivingCarDriver)
-//{
-//    auto const expectedName = "1.0";
-//    SelfDrivingCar const selfDrivingCar(expectedName, "CrashemFast");
-//    std::list<std::shared_ptr<Driver>> const drivers {
-//        selfDrivingCar
-//    };
-//
-//    Race race("whocares", drivers);
-//
-//    EXPECT_EQ(race.getDriverName(selfDrivingCar), expectedName);
-//}
 
-//TEST(RaceTest, GetDriverNameForSelfDrivingCarDriverHowItShouldWork)
-//{
-//    std::string const algorithmVersion = "1.0.0";
-//    std::string const companyName = "CrashemFast";
-//    auto const expectedName = "Self Driving Car - " + companyName + " (" + algorithmVersion + ")";
-//
-//    SelfDrivingCar const selfDrivingCar(algorithmVersion, companyName);
-//    std::list<std::shared_ptr<Driver>> const drivers {
-//        selfDrivingCar
-//    };
-//
-//    Race race("whocares", drivers);
-//
-//    EXPECT_EQ(race.getDriverName(selfDrivingCar), expectedName);
-//}
+TEST(RaceTest, GetDriverNameForSelfDrivingCarDriver)
+{
+    std::string const algorithmVersion = "1.0.0";
+    std::string const companyName = "CrashemFast";
+    auto const expectedName = "Self Driving Car - " + companyName + " (" + algorithmVersion + ")";
+
+    std::shared_ptr<SelfDrivingCar> const selfDrivingCar = std::make_shared<SelfDrivingCar>(algorithmVersion, companyName);
+    std::list<std::shared_ptr<Driver>> const drivers {
+        selfDrivingCar
+    };
+
+    Race race("whocares", drivers);
+
+    EXPECT_EQ(race.getDriverName(selfDrivingCar), expectedName);
+}
+
+TEST(RaceTest, PositionReturnsCorrectValue)
+{
+    auto driver = std::make_shared<Driver>("name", "country");
+    Race race("whocares", { driver });
+
+    EXPECT_EQ(race.position(driver), 0);
+}
+
+TEST(RaceTest, PositionReturnsCorrectValueWithMultipleDrivers)
+{
+    auto driver1 = std::make_shared<Driver>("name", "country");
+    auto driver2 = std::make_shared<Driver>("name2", "country2");
+    auto selfDriver = std::make_shared<SelfDrivingCar>("1.0", "Company");
+    Race race("whocares", { driver1, driver2, selfDriver });
+
+    EXPECT_EQ(race.position(driver2), 1);
+}

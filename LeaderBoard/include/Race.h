@@ -14,7 +14,6 @@ class Race
 
     std::string m_name;
     std::list<std::shared_ptr<Driver>> m_results;
-    std::unordered_map<std::shared_ptr<Driver>, std::string> m_driverNames;
 
 public: 
     Race(std::string const& name, std::list<std::shared_ptr<Driver>> const& drivers);
