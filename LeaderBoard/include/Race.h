@@ -5,25 +5,27 @@
 #include <string>
 #include <list>
 #include <unordered_map>
+#include <memory>
+
 
 class Race
 {
     static const int POINTS[];
 
     std::string m_name;
-    std::list<Driver> m_results;
-    std::unordered_map<Driver, std::string> m_driverNames;
+    std::list<std::shared_ptr<Driver>> m_results;
+    std::unordered_map<std::shared_ptr<Driver>, std::string> m_driverNames;
 
 public: 
-    Race(std::string const& name, std::list<Driver> const& drivers);
+    Race(std::string const& name, std::list<std::shared_ptr<Driver>> const& drivers);
 
-    int position(Driver const& driver);
+    int position(std::shared_ptr<Driver> const& driver);
 
-    int getPoints(Driver driver);
+    int getPoints(std::shared_ptr<Driver> driver);
 
-    std::list<Driver> getResults();
+    std::list<std::shared_ptr<Driver>> getResults();
 
-    std::string getDriverName(Driver driver);
+    std::string getDriverName(std::shared_ptr<Driver> driver);
     
     std::string toString();
 };

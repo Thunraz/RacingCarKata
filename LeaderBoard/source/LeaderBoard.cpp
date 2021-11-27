@@ -11,7 +11,7 @@ std::map<std::string, int> Leaderboard::driverResults()
     std::map<std::string, int> results;
     for (Race& race : m_races)
     {
-        for (Driver& driver : race.getResults())
+        for (auto const driver : race.getResults())
         {
             std::string driverName = race.getDriverName(driver);
             int points = race.getPoints(driver);
