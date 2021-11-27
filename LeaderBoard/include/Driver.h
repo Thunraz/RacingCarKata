@@ -2,8 +2,7 @@
 
 #include <string>
 
-class Driver
-{
+class Driver {
     std::string const m_name;
     std::string const m_country;
 
@@ -17,15 +16,13 @@ public:
     bool operator==(Driver const& other) const;
 };
 
-namespace std
-{
-    template <>
-    struct hash<Driver>
+namespace std {
+template <>
+struct hash<Driver> {
+    std::size_t operator()(Driver const& driver) const
     {
-        std::size_t operator()(Driver const& driver) const
-        {
-            std::hash< std::string > const hash;
-            return hash( driver.getName() ) * 31 + hash( driver.getCountry() );
-        }
-    };
-}
+        std::hash<std::string> const hash;
+        return hash(driver.getName()) * 31 + hash(driver.getCountry());
+    }
+};
+} // namespace std
