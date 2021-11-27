@@ -4,14 +4,14 @@
 
 #include <string>
 
-class SelfDrivingCar : public Driver
-{
+class SelfDrivingCar : public Driver {
     std::string m_algorithmVersion;
 
 public:
     SelfDrivingCar(std::string algorithmVersion, std::string company);
 
-    std::string getAlgorithmVersion();
+    std::string getAlgorithmVersion() const;
 
     void setAlgorithmVersion(std::string algorithmVersion);
+    std::string getDisplayName() const override;
 };

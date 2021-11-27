@@ -34,3 +34,14 @@ TEST(SelfDrivingCarTest, AlgorithmAfterSetAlgorithm)
 
     ASSERT_EQ(selfDrivingCar.getAlgorithmVersion(), expectedVersion);
 }
+
+TEST(SelfDrivingCarTest, GetDisplayName)
+{
+    std::string const algorithmVersion = "1.0.0";
+    std::string const companyName = "CrashemFast";
+    auto const expectedName = "Self Driving Car - " + companyName + " (" + algorithmVersion + ")";
+
+    SelfDrivingCar const selfDrivingCar(algorithmVersion, companyName);
+
+    ASSERT_EQ(selfDrivingCar.getDisplayName(), expectedName);
+}

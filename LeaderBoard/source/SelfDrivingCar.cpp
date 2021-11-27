@@ -7,10 +7,15 @@ SelfDrivingCar::SelfDrivingCar(std::string algorithmVersion, std::string company
 {
 }
 
-std::string SelfDrivingCar::getAlgorithmVersion() { return m_algorithmVersion; }
+std::string SelfDrivingCar::getAlgorithmVersion() const { return m_algorithmVersion; }
 
 void SelfDrivingCar::setAlgorithmVersion(std::string algorithmVersion)
 {
     // TODO does not update driver name from base class
     m_algorithmVersion = algorithmVersion;
+}
+
+std::string SelfDrivingCar::getDisplayName() const
+{
+    return "Self Driving Car - " + getCountry() + " (" + getAlgorithmVersion() + ")";
 }
