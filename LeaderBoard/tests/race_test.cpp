@@ -1,6 +1,5 @@
-#include <gtest/gtest.h>
 #include "Race.h"
-
+#include <gtest/gtest.h>
 
 TEST(RaceTest, GetResultsReturnsInitialEmptyList)
 {
@@ -13,9 +12,7 @@ TEST(RaceTest, GetResultsReturnsInitialEmptyList)
 TEST(RaceTest, GetResultsReturnsInitialListWithOneDriverReturnsCorrectSize)
 {
     Driver const driver { "name", "country" };
-    std::list<Driver> const drivers {
-        driver
-    };
+    std::list<Driver> const drivers { driver };
 
     Race race("whocares", drivers);
 
@@ -25,9 +22,7 @@ TEST(RaceTest, GetResultsReturnsInitialListWithOneDriverReturnsCorrectSize)
 TEST(RaceTest, GetResultsReturnsInitialListWithOneDriverIsEqual)
 {
     Driver const driver { "name", "country" };
-    std::list<Driver> const drivers {
-        driver
-    };
+    std::list<Driver> const drivers { driver };
 
     Race race("whocares", drivers);
 
@@ -38,11 +33,23 @@ TEST(RaceTest, GetDriverNameForRegularDriver)
 {
     auto const expectedName = "name";
     Driver const driver { expectedName, "country" };
-    std::list<Driver> const drivers {
-        driver
-    };
-    
+    std::list<Driver> const drivers { driver };
+
     Race race("whocares", drivers);
 
     EXPECT_EQ(race.getDriverName(driver), expectedName);
+}
+
+TEST(RaceTest, GetDriverNameForSelfDrivingCarDriver)
+{
+    FAIL();
+    //    auto const expectedName = "name";
+    //    Driver const driver { expectedName, "country" };
+    //    std::list<Driver> const drivers {
+    //        driver
+    //    };
+    //
+    //    Race race("whocares", drivers);
+    //
+    //    EXPECT_EQ(race.getDriverName(driver), expectedName);
 }
