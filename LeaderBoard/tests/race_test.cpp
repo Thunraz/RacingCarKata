@@ -1,5 +1,6 @@
 #include "Race.h"
 #include <gtest/gtest.h>
+#include <SelfDrivingCar.h>
 
 TEST(RaceTest, GetResultsReturnsInitialEmptyList)
 {
@@ -42,14 +43,13 @@ TEST(RaceTest, GetDriverNameForRegularDriver)
 
 TEST(RaceTest, GetDriverNameForSelfDrivingCarDriver)
 {
-    FAIL();
-    //    auto const expectedName = "name";
-    //    Driver const driver { expectedName, "country" };
-    //    std::list<Driver> const drivers {
-    //        driver
-    //    };
-    //
-    //    Race race("whocares", drivers);
-    //
-    //    EXPECT_EQ(race.getDriverName(driver), expectedName);
+    auto const expectedName = "1.0";
+    SelfDrivingCar const selfDrivingCar(expectedName, "CrashemFast");
+    std::list<Driver> const drivers {
+            selfDrivingCar
+    };
+
+    Race race("whocares", drivers);
+
+    EXPECT_EQ(race.getDriverName(selfDrivingCar), expectedName);
 }
