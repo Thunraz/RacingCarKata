@@ -2,6 +2,8 @@
 if (USE_GOOGLE_TEST)
 	add_executable(LeaderBoard_Test_Gmock
 			LeaderBoard_Test.cpp
+			race_test.cpp
+			driver_test.cpp
 			)
 	set_property(TARGET LeaderBoard_Test_Gmock PROPERTY CXX_STANDARD 14)
 	if (NOT USE_APPROVAL_TESTS)
