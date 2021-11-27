@@ -37,10 +37,20 @@ TEST(DriverCompareTest, ValueComparisonDifferentDrivers)
     ASSERT_FALSE(driver1 == driver2);
 }
 
-// TEST(DriverHashTest, ValuesForDifferentdriversAreDifferent)
-//{
-//     Driver const driver1 { "name", "UK" };
-//     Driver const driver2 { "not_same", "___DefinitelyNotSame___" };
-//
-//     ASSERT_EQ(std::hash(driver1), std::hash(driver2));
-// }
+TEST(DriverHashTest, HashValuesForDifferentdriversAreDifferent)
+{
+    std::hash<Driver> hasher;
+     Driver driver1 { "name", "UK" };
+     Driver driver2 { "not_same", "___DefinitelyNotSame___" };
+
+     ASSERT_NE(hasher(driver1), hasher(driver2));
+}
+
+TEST(DriverHashTest, HashValuesForDifferentDriversWithSameDataAreEqual)
+{
+    std::hash<Driver> hasher;
+    Driver driver1 { "name", "Japan" };
+    Driver driver2 { "name", "Japan" };
+
+    ASSERT_EQ(hasher(driver1), hasher(driver2));
+}
