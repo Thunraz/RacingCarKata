@@ -54,3 +54,11 @@ TEST(DriverHashTest, HashValuesForDifferentDriversWithSameDataAreEqual)
 
     ASSERT_EQ(hasher(driver1), hasher(driver2));
 }
+
+TEST(DriverTest, DisplayName)
+{
+    auto const expectedDisplayName = "display name";
+    Driver const driver { expectedDisplayName, "country" };
+
+    EXPECT_EQ(driver.getDisplayName(), expectedDisplayName);
+}

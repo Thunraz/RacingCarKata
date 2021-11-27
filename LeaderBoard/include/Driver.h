@@ -14,6 +14,7 @@ public:
     std::string getCountry() const;
 
     bool operator==(Driver const& other) const;
+    virtual std::string getDisplayName() const;
 };
 
 namespace std {

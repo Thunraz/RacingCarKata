@@ -46,7 +46,23 @@ TEST(RaceTest, GetDriverNameForSelfDrivingCarDriver)
     auto const expectedName = "1.0";
     SelfDrivingCar const selfDrivingCar(expectedName, "CrashemFast");
     std::list<Driver> const drivers {
-            selfDrivingCar
+        selfDrivingCar
+    };
+
+    Race race("whocares", drivers);
+
+    EXPECT_EQ(race.getDriverName(selfDrivingCar), expectedName);
+}
+
+TEST(RaceTest, GetDriverNameForSelfDrivingCarDriverHowItShouldWork)
+{
+    std::string const algorithmVersion = "1.0.0";
+    std::string const companyName = "CrashemFast";
+    auto const expectedName = "Self Driving Car - " + companyName + " (" + algorithmVersion + ")";
+
+    SelfDrivingCar const selfDrivingCar(algorithmVersion, companyName);
+    std::list<Driver> const drivers {
+        selfDrivingCar
     };
 
     Race race("whocares", drivers);
